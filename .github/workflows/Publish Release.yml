@@ -33,7 +33,7 @@ jobs:
           zip -r Flow.Launcher.Plugin.GoogleCalendar.zip . -x '*.git*'
       - name: Publish
         if: success()
-        uses: softprops/action-gh/release@v1
+        uses: softprops/action-gh-release@v1
         with:
           files: "Flow.Launcher.Plugin.GoogleCalendar.zip"
           tag_name: "v${{steps.version.outputs.prop}}"
