@@ -2,4 +2,3 @@ flowlauncher
 oauth2client
 google-api-python-client
 ctparse
-regex==2022.10.31
