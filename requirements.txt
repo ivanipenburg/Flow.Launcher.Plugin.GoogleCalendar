@@ -3,3 +3,4 @@ oauth2client
 google-api-python-client
 ctparse
 regex
+regex._regex
