@@ -2,4 +2,4 @@ flowlauncher
 oauth2client
 google-api-python-client
 ctparse
-regex==2019.11.1
+regex==2020.9.27
