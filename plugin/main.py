@@ -23,6 +23,11 @@ class GoogleCalendar(FlowLauncher):
             }
         ]
 
+    def action_result(self, title, subtitle, action):
+        result = self.show_result(title, subtitle)
+        result[0]["Action"] = action
+        return result
+
     def query(self, query):
         if query == "":
             return self.show_result("No event name specified yet", "Please provide a name for your event")
@@ -38,7 +43,7 @@ class GoogleCalendar(FlowLauncher):
 
             event_name = query[:parse.resolution.mstart - 1]
 
-            return self.show_result(f"Creating event '{event_name}'", f"from {start_dt} to {end_dt}")
+            return self.action_result(f"Creating event '{event_name}'", f"from {start_dt} to {end_dt}", create_event)
             
         except:
             return self.show_result("Error", "Something went wrong")
