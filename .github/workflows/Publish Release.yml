@@ -30,7 +30,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt -t ./lib
-          zip -r Flow.Launcher.Plugin.GoogleCalendar.zip * -x "*.git*"
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: 'zip'
+          filename: 'Flow.Launcher.Plugin.GoogleCalendar.zip'
+          exclusions: '*.git*'
       - name: Publish
         if: success()
         uses: softprops/action-gh-release@v1
