@@ -10,6 +10,7 @@ from apiclient import discovery
 from ctparse import ctparse
 from flowlauncher import FlowLauncher
 from oauth2client import client, file, tools
+
 from templates import *
 
 SCOPES = 'https://www.googleapis.com/auth/calendar'
@@ -17,6 +18,7 @@ APPLICATION_NAME = 'Google Calendar Flow Launcher Plugin'
 CLIENT_ID = None
 PROJECT_ID = None
 CLIENT_SECRET = None
+CLIENT_SECRET_FILE = 'credentials/credentials.json'
 
 def open_webpage(url):
     webbrowser.open(url)
@@ -26,60 +28,36 @@ def get_credentials():
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
     credential_path = os.path.join(credential_dir, 'calendar-python.json')
-
+    
     store = file.Storage(credential_path)
     credentials = store.get()
 
-    if not credentials or credentials.invalid:
-        # Create client secret file
-        client_secret_file = {
-            "installed": {
-                "client_id": CLIENT_ID,
-                "project_id": PROJECT_ID,
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://accounts.google.com/o/oauth2/token",
-                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                "client_secret": CLIENT_SECRET,
-                "redirect_uris": ["http://localhost"]
-            }
-        }
-        
-        # Create JSON file from dictionary
-        with open(credential_path, 'w') as outfile:
-            json.dump(client_secret_file, outfile)
+    # if not credentials or credentials.invalid:
+    #     if not os.path.exists(CLIENT_SECRET_FILE):
+    #         # Create client secret file
+    #         client_secret_file = {
+    #             "installed": {
+    #                 "client_id": CLIENT_ID,
+    #                 "project_id": PROJECT_ID,
+    #                 "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    #                 "token_uri": "https://accounts.google.com/o/oauth2/token",
+    #                 "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    #                 "client_secret": CLIENT_SECRET,
+    #                 "redirect_uris": ["http://localhost"]
+    #             }
+    #         }
+            
+    #         # Create JSON file from dictionary
+    #         with open(CLIENT_SECRET_FILE, 'w') as outfile:
+    #             json.dump(client_secret_file, outfile)
 
-        flow = client.flow_from_clientsecrets(credential_path, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        credentials = tools.run_flow(flow, store)
-        # print('Storing credentials to ' + credential_path)
+    #     flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+    #     flow.user_agent = APPLICATION_NAME
+    #     credentials = tools.run_flow(flow, store)
+    #     # print('Storing credentials to ' + credential_path)
 
     return credentials
 
-
-def create_event(event_name, start_dt, end_dt):
-    credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
-
-    # Get the timezone of the user
-    user_info = service.calendarList().get(calendarId='primary').execute()
-    timezone = user_info['timeZone']
-    
-    event = {
-        'summary': event_name,
-        'start': {
-            'dateTime': start_dt,
-            'timeZone': timezone,
-        },
-        'end': {
-            'dateTime': end_dt,
-            'timeZone': timezone,
-        },
-    }
-
-    event = service.events().insert(calendarId='primary', body=event).execute()
-
-    
 
 
 class GoogleCalendar(FlowLauncher):
@@ -141,11 +119,37 @@ class GoogleCalendar(FlowLauncher):
 
             event_name = query[:parse.resolution.mstart - 1]
 
-            # return self.show_result(f"Creating event '{event_name}'", f"from {start_dt} to {end_dt}")
             return self.action_result(f"Creating event '{event_name}'", f"from {start_dt} to {end_dt}", "create_event", [event_name, start_dt_string, end_dt_string])
             
         except Exception as e:
             return self.show_result("Error", str(e))
+
+    def create_event(self, event_name, start_dt, end_dt):
+        credentials = get_credentials()
+        try:
+            http = credentials.authorize(httplib2.Http())
+            service = discovery.build('calendar', 'v3', http=http)
+
+            # Get the timezone of the user
+            user_info = service.calendarList().get(calendarId='primary').execute()
+            timezone = user_info['timeZone']
+            
+            event = {
+                'summary': event_name,
+                'start': {
+                    'dateTime': start_dt,
+                    'timeZone': timezone,
+                },
+                'end': {
+                    'dateTime': end_dt,
+                    'timeZone': timezone,
+                },
+            }
+
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            self.show_result('Event created: %s' % (event.get('htmlLink')), "")
+        except Exception as e:
+            self.show_result('Error', e)
 
 
 if __name__ == "__main__":
