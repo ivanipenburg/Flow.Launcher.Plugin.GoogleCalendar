@@ -107,6 +107,7 @@ class GoogleCalendar(FlowLauncher):
 
     def query(self, query):
         # Load settings
+        global CLIENT_ID, PROJECT_ID, CLIENT_SECRET
         if not CLIENT_ID or not PROJECT_ID or not CLIENT_SECRET:
             settings = self.rpc_request.get("settings", {})
             if client_id := settings.get("client_id"):
