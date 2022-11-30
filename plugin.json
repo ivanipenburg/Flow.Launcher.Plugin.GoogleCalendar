@@ -7,6 +7,6 @@
     "Version": "0.2.2",
     "Language": "python",
     "Website": "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar",
-    "IcoPath": "Images\\icon.png",
+    "IcoPath": "Images\\app.png",
     "ExecuteFileName": "main.py"
 }
