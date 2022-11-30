@@ -1,11 +1,16 @@
 body:
-  - type: text
+  - type: input
     attributes:
       name: client_id
-      label: Client ID
+      label: 'Client ID'
       description: Client ID from Google Cloud Console
-  - type: text
+  - type: input
+    attributes:
+      name: project_id
+      label: 'Project ID'
+      description: Project ID from Google Cloud Console
+  - type: input
     attributes:
       name: client_secret
-      label: Client Secret
+      label: 'Client Secret'
       description: Client Secret from Google Cloud Console
