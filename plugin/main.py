@@ -3,7 +3,6 @@ import os
 import webbrowser
 from datetime import datetime
 
-import httplib2
 from apiclient import discovery
 from credentials import credentials_exist, get_credentials
 from ctparse import ctparse
@@ -67,8 +66,7 @@ class GoogleCalendar(FlowLauncher):
         credentials = get_credentials()
 
         try:
-            http = credentials.authorize(httplib2.Http())
-            service = discovery.build('calendar', 'v3', http=http)
+            service = discovery.build('calendar', 'v3', credentials=credentials)
 
             # Get the timezone of the user
             user_info = service.calendarList().get(calendarId='primary').execute()

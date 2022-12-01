@@ -12,7 +12,7 @@ def credentials_exist():
     # credential_dir = os.path.join(home_dir, '.credentials')
     # credential_path = os.path.join(credential_dir, 'calendar-plugin.json')
     # return os.path.exists(credential_path)
-    return os.path.exists('token.json')
+    return os.path.exists('credentials.json')
 
 def get_credentials():
     creds = None
