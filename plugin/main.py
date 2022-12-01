@@ -1,13 +1,14 @@
+import copy
 import os
 import webbrowser
 from datetime import datetime
 
 import httplib2
 from apiclient import discovery
+from credentials import get_credentials
 from ctparse import ctparse
 from flowlauncher import FlowLauncher
-from templates import *
-from credentials import get_credentials
+from templates import ACTION_RESULT, EVENT, SHOW_RESULT
 
 SETUP_URL = "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar#setup"
 
@@ -17,27 +18,22 @@ def open_webpage(url):
 
 
 class GoogleCalendar(FlowLauncher):
+
     def show_result(self, title, subtitle):
-        return [
-            {
-                "Title": title,
-                "SubTitle": subtitle,
-                "IcoPath": "Images/app.png",
-            }
-        ]
+        result = SHOW_RESULT.copy()
+        result["Title"] = title
+        result["SubTitle"] = subtitle
+        return [result]
+
 
     def action_result(self, title, subtitle, action, params):
-        return [
-            {
-                "Title": title,
-                "SubTitle": subtitle,
-                "IcoPath": "Images/app.png",
-                "JsonRPCAction": {
-                    "method": action,
-                    "parameters": params,
-                }
-            }
-        ]
+        result = ACTION_RESULT.copy()
+        result["Title"] = title
+        result["SubTitle"] = subtitle
+        result["JsonRPCAction"]["method"] = action
+        result["JsonRPCAction"]["parameters"] = params
+        return [result]
+
 
     def query(self, query):
         home_dir = os.path.expanduser('~')
@@ -69,6 +65,7 @@ class GoogleCalendar(FlowLauncher):
         except Exception as e:
             return self.show_result("Error", str(e))
 
+
     def create_event(self, event_name, start_dt, end_dt):
         credentials = get_credentials()
 
@@ -80,17 +77,12 @@ class GoogleCalendar(FlowLauncher):
             user_info = service.calendarList().get(calendarId='primary').execute()
             timezone = user_info['timeZone']
             
-            event = {
-                'summary': event_name,
-                'start': {
-                    'dateTime': start_dt,
-                    'timeZone': timezone,
-                },
-                'end': {
-                    'dateTime': end_dt,
-                    'timeZone': timezone,
-                },
-            }
+            event = EVENT.copy()
+            event["summary"] = event_name
+            event["start"]["dateTime"] = start_dt
+            event["start"]["timeZone"] = timezone
+            event["end"]["dateTime"] = end_dt
+            event["end"]["timeZone"] = timezone
 
             event = service.events().insert(calendarId='primary', body=event).execute()
             # self.show_result('Event created: %s' % (event.get('htmlLink')), "")
