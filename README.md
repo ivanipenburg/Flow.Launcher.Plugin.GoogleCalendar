@@ -4,7 +4,7 @@ A plugin for Flow Launcher to add events to Google Calendar. To use the plugin, 
 # Setup
 Instructions for setting up your Google Cloud credentials, you can also follow the instructions [here](https://developers.google.com/calendar/api/quickstart/python) up until 'Install the Google client library' step:
 1. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project)
-2. [Enable the Google Calendar API](https://developers.google.com/workspace/guides/create-project)
+2. [Enable the Google Calendar API](https://console.cloud.google.com/flows/enableapi?apiid=calendar-json.googleapis.com)
 3. In the Google Cloud console, go to Menu > **APIs & Services** > **Credentials**
 4. Click **Create credentials** > **OAuth client ID**
 5. Select **Desktop app** and click **Create**
