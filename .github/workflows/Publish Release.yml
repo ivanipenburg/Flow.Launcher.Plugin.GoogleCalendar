@@ -26,15 +26,11 @@ jobs:
           path: "plugin.json"
           prop_path: "Version"
       - run: echo ${{steps.version.outputs.prop}}
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
       - name: Install dependencies
         run: |
-          poetry init
-          poetry add flowlauncher
-          poetry add oauth2client
-          poetry add google-api-python-client
-          poetry add ctparse
+          python -m pip install --upgrade pip
+          pip install -r ./requirements.txt -t ./lib
+          pip install types-six types-requests
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
