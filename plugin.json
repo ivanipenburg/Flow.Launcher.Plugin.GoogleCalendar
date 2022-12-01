@@ -1,10 +1,10 @@
 {
-    "ID": "1faw099fslewf",
+    "ID": "f823a07e-7191-11ed-a1eb-0242ac120002",
     "ActionKeyword": "gc",
     "Name": "Google Calendar",
     "Description": "Add events to your Google Calendar",
     "Author": "Ilja van Ipenburg",
-    "Version": "0.3.7",
+    "Version": "0.4.0",
     "Language": "python",
     "Website": "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar",
     "IcoPath": "Images\\app.png",
