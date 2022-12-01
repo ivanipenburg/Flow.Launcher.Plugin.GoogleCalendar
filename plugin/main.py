@@ -5,12 +5,13 @@ from datetime import datetime
 
 import httplib2
 from apiclient import discovery
-from credentials import get_credentials
+from credentials import credentials_exist, get_credentials
 from ctparse import ctparse
 from flowlauncher import FlowLauncher
 from templates import ACTION_RESULT, EVENT, SHOW_RESULT
 
 SETUP_URL = "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar#setup"
+TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
 def open_webpage(url):
@@ -36,11 +37,7 @@ class GoogleCalendar(FlowLauncher):
 
 
     def query(self, query):
-        home_dir = os.path.expanduser('~')
-        credential_dir = os.path.join(home_dir, '.credentials')
-        credential_path = os.path.join(credential_dir, 'calendar-plugin.json')
-
-        if not os.path.exists(credential_path):
+        if not credentials_exist():
             return self.action_result("It seems like you have not set up your credentials yet", "Press Enter to open the setup page", "open_webpage", [SETUP_URL])
 
         if query == "":
@@ -55,8 +52,8 @@ class GoogleCalendar(FlowLauncher):
             start_dt = parse.resolution.start.dt
             end_dt = parse.resolution.end.dt
 
-            start_dt_string = start_dt.strftime("%Y-%m-%dT%H:%M:%S")
-            end_dt_string = end_dt.strftime("%Y-%m-%dT%H:%M:%S")
+            start_dt_string = start_dt.strftime(TIME_FORMAT)
+            end_dt_string = end_dt.strftime(TIME_FORMAT)
 
             event_name = query[:parse.resolution.mstart - 1]
 
@@ -85,7 +82,7 @@ class GoogleCalendar(FlowLauncher):
             event["end"]["timeZone"] = timezone
 
             event = service.events().insert(calendarId='primary', body=event).execute()
-            # self.show_result('Event created: %s' % (event.get('htmlLink')), "")
+            
         except Exception as e:
             self.show_result('Error', e)
 

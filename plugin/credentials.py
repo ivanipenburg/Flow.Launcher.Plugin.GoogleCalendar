@@ -1,6 +1,13 @@
 import os
 from oauth2client import client, file, tools
 
+
+def credentials_exist():
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
+    credential_path = os.path.join(credential_dir, 'calendar-plugin.json')
+    return os.path.exists(credential_path)
+
 def get_credentials():
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
