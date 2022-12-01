@@ -10,7 +10,6 @@ from apiclient import discovery
 from ctparse import ctparse
 from flowlauncher import FlowLauncher
 from oauth2client import client, file, tools
-
 from templates import *
 
 SCOPES = 'https://www.googleapis.com/auth/calendar'
@@ -85,21 +84,21 @@ class GoogleCalendar(FlowLauncher):
 
     def query(self, query):
         # Load settings
-        global CLIENT_ID, PROJECT_ID, CLIENT_SECRET
-        if not CLIENT_ID or not PROJECT_ID or not CLIENT_SECRET:
-            settings = self.rpc_request.get("settings", {})
-            if client_id := settings.get("client_id"):
-                CLIENT_ID = client_id
-            else:
-                return self.action_result("It seems like you haven't set up your API information yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
-            if project_id := settings.get("project_id"):
-                PROJECT_ID = project_id
-            else:
-                return self.action_result("It seems like you haven't set up your Google Cloud API yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
-            if client_secret := settings.get("client_secret"):
-                CLIENT_SECRET = client_secret
-            else:
-                return self.action_result("It seems like you haven't set up your API information yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
+        # global CLIENT_ID, PROJECT_ID, CLIENT_SECRET
+        # if not CLIENT_ID or not PROJECT_ID or not CLIENT_SECRET:
+        #     settings = self.rpc_request.get("settings", {})
+        #     if client_id := settings.get("client_id"):
+        #         CLIENT_ID = client_id
+        #     else:
+        #         return self.action_result("It seems like you haven't set up your API information yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
+        #     if project_id := settings.get("project_id"):
+        #         PROJECT_ID = project_id
+        #     else:
+        #         return self.action_result("It seems like you haven't set up your Google Cloud API yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
+        #     if client_secret := settings.get("client_secret"):
+        #         CLIENT_SECRET = client_secret
+        #     else:
+        #         return self.action_result("It seems like you haven't set up your API information yet", "Press Enter to open the instructions page", "open_webpage", ["https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar"])
 
 
         if query == "":
