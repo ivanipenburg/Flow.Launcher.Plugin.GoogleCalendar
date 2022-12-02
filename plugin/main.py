@@ -13,10 +13,6 @@ SETUP_URL = "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
-def open_webpage(url):
-    webbrowser.open(url)
-
-
 class GoogleCalendar(FlowLauncher):
 
     def show_result(self, title, subtitle):
@@ -33,6 +29,10 @@ class GoogleCalendar(FlowLauncher):
         result["JsonRPCAction"]["method"] = action
         result["JsonRPCAction"]["parameters"] = params
         return [result]
+
+    
+    def open_webpage(self, url):
+        webbrowser.open(url)
 
 
     def query(self, query):
