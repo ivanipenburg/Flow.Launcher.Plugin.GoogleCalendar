@@ -42,7 +42,7 @@ jobs:
       - name: Move files to staging
         run: |
           mkdir -p staging
-          mv run.exe staging
+          mv main.exe staging
           mv plugin.json staging   
       - name: Archive Release
         uses: thedoctor0/zip-release@main
