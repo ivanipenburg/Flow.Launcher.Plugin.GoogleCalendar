@@ -38,7 +38,7 @@ jobs:
           pip install -r ./requirements-dev.txt
       - name: Build
         run: |
-          python -m nuitka main.py --assume-yes-for-downloads --standalone --onefile --windows-icon-from-ico=Images/app.png     
+          python -m nuitka main.py --python-version 3.8 --assume-yes-for-downloads --standalone --onefile --windows-icon-from-ico=Images/app.png     
       - name: Move files to staging
         run: |
           mkdir -p staging
