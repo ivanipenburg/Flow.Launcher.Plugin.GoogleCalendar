@@ -3,11 +3,12 @@ import os
 import webbrowser
 from datetime import datetime
 
-from credentials import credentials_exist, get_credentials
 from ctparse import ctparse
 from flowlauncher import FlowLauncher
 from googleapiclient import discovery
-from templates import ACTION_RESULT, EVENT, SHOW_RESULT
+
+from .credentials import credentials_exist, get_credentials
+from .templates import ACTION_RESULT, EVENT, SHOW_RESULT
 
 SETUP_URL = "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar#setup"
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
