@@ -3,7 +3,7 @@ name: Publish Release
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [nuitka]
     paths-ignore:
       - .github/workflows/*
 
@@ -19,6 +19,24 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Cache plugin dependencies
+        id: plugin-cache
+        uses: actions/cache@v2
+        if: startsWith(runner.os, 'Windows')
+        with:
+          path: ~/AppData/Local/pip/Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Cache Build dependencies
+        - id: build-cache
+        - uses: actions/cache@v2
+        - if: startsWith(runner.os, 'Windows')
+        - with:
+          - path: ~/AppData/Local/pip/Cache
+          - key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
+          - restore-keys: |
+            ${{ runner.os }}-pip-
       - name: get version
         id: version
         uses: notiz-dev/github-action-json-property@release
@@ -26,24 +44,38 @@ jobs:
           path: "plugin.json"
           prop_path: "Version"
       - run: echo ${{steps.version.outputs.prop}}
-      - name: Install dependencies
+      - name: Install Plugin dependencies
+        if: steps.plugin-cache.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt -t ./lib
           del './lib/regex/_regex.cp39-win_amd64.pyd'
           move './temp_lib/regex/_regex.cp38-win_amd64.pyd' './lib/regex/'
           Remove-Item -Path "./temp_lib" -Force -Recurse
+      - name: Install Build Dependencies
+        if: steps.build-cache.outputs.cache-hit != 'true'
+        run: |
+          pip install -r ./requirements-dev.txt
+      - name: Build
+        run: |
+          python -m nuitka run.py --assume-yes-for-downloads --standalone --onefile --windows-icon-from-ico=Images/app.png     
+      - name: Move files to staging
+        run: |
+          mkdir -p staging
+          mv run.exe staging
+          mv plugin.json staging   
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
-          type: 'zip'
-          filename: 'Flow.Launcher.Plugin.GoogleCalendar.zip'
+          type: "zip"
+          directory: "./staging"
+          filename: "${{github.event.repository.name}}.zip"
           exclusions: '*.git*'
       - name: Publish
         if: success()
         uses: softprops/action-gh-release@v1
         with:
-          files: "Flow.Launcher.Plugin.GoogleCalendar.zip"
+          files: "./staging/${{github.event.repository.name}}.zip"
           tag_name: "v${{steps.version.outputs.prop}}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
