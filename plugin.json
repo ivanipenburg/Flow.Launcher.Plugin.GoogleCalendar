@@ -5,8 +5,8 @@
     "Description": "Add events to your Google Calendar",
     "Author": "Ilja van Ipenburg",
     "Version": "1.1.0",
-    "Language": "python",
+    "Language": "executable",
     "Website": "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar",
-    "IcoPath": "Images\\app.png",
-    "ExecuteFileName": "main.py"
+    "IcoPath": "main.exe",
+    "ExecuteFileName": "main.exe"
 }
