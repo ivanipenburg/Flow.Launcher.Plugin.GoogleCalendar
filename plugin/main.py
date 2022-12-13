@@ -1,14 +1,10 @@
-import copy
-import os
 import webbrowser
 from datetime import datetime
 
 from apiclient import discovery
-from ctparse import ctparse
-
-from flox import Flox
-
 from credentials import credentials_exist, get_credentials
+from ctparse import ctparse
+from flox import Flox
 from templates import EVENT
 
 SETUP_URL = "https://github.com/ivanipenburg/Flow.Launcher.Plugin.GoogleCalendar#setup"
@@ -56,11 +52,9 @@ class GoogleCalendar(Flox):
             start_dt_string = start_dt.strftime(TIME_FORMAT)
             end_dt_string = end_dt.strftime(TIME_FORMAT)
 
-            # return self.show_result("Start", start_dt_string)
-
             event_name = query[:parse.resolution.mstart - 1]
 
-            return self.action_result(f"Creating event '{event_name}'", f"from {start_dt_string} to {end_dt_string}", "create_event", [event_name, start_dt_string, end_dt_string])
+            return self.action_result(f"Creating event '{event_name}'", f"from {start_dt} to {end_dt}", "create_event", [event_name, start_dt_string, end_dt_string])
         except Exception as e:
             return self.show_result("Error", str(e))
 
