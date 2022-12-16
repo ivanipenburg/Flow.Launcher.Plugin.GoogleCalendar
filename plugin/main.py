@@ -12,6 +12,9 @@ TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
 class GoogleCalendar(Flox):
+    def __init__(self):
+        self.upcoming_events = []
+
 
     def show_result(self, title, subtitle):
         self.add_item(
@@ -36,8 +39,11 @@ class GoogleCalendar(Flox):
         if not credentials_exist():
             return self.action_result("It seems like you have not set up your credentials yet", "Press Enter to open the setup page", "open_webpage", [SETUP_URL])
 
+        if self.upcoming_events == []:
+            self.display_current_events()
+
         if query == "":
-            return self.show_result("No event name specified yet", "Please provide a name for your event")
+            self.show_result("No event name specified yet", "Please provide a name for your event")
 
         try:
             ts = datetime.now()
@@ -80,6 +86,21 @@ class GoogleCalendar(Flox):
             
         except Exception as e:
             self.show_result('Error', e)
+
+
+    def display_current_events(self):
+        credentials = get_credentials()
+
+        try:
+            service = discovery.build('calendar', 'v3', credentials=credentials)
+
+            events = service.events().list(calendarId='primary', timeMin=datetime.utcnow().isoformat() + 'Z', maxResults=10, singleEvents=True, orderBy='startTime').execute()
+
+            for event in events['items']:
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                self.show_result(event['summary'], start)
+        except Exception as e:
+            self.show_result('Could not load upcoming events', e)
 
 
 if __name__ == "__main__":
