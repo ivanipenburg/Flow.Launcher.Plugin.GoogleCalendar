@@ -2,10 +2,11 @@ import webbrowser
 from datetime import datetime
 
 from apiclient import discovery
-from credentials import credentials_exist, get_credentials
 from ctparse import ctparse
-from events import get_event_times, get_sorted_events
 from flox import Flox
+
+from credentials import credentials_exist, get_credentials
+from events import get_event_times, get_sorted_events
 from icons import date_to_glyph_id
 from templates import EVENT
 
@@ -18,6 +19,7 @@ class GoogleCalendar(Flox):
     def __init__(self):
         super().__init__()
         self.font_family = "#Date-Icons"
+        self.upcoming_events = []
 
 
     def show_result(self, title, subtitle, score=99, glyph_id="", method=None, params=None):
@@ -92,26 +94,29 @@ class GoogleCalendar(Flox):
 
         self.show_result("Upcoming events", "", score=40)
         
-        try:
-            service = discovery.build('calendar', 'v3', credentials=credentials)
+        if self.upcoming_events == []:
+            try:
+                service = discovery.build('calendar', 'v3', credentials=credentials)
 
-            all_events = get_sorted_events(service, NUM_UPCOMING_EVENTS)
+                all_events = get_sorted_events(service, NUM_UPCOMING_EVENTS)
+                self.upcoming_events = all_events
+            except Exception as e:
+                self.show_result('Could not load upcoming events', e)
 
-            for i, event in enumerate(all_events):
-                start_dt, _, start_time, end_time = get_event_times(event, TIME_FORMAT)
+        for i, event in enumerate(self.upcoming_events):
+            start_dt, _, start_time, end_time = get_event_times(event, TIME_FORMAT)
 
-                location = event['location'] if 'location' in event else None
+            location = event['location'] if 'location' in event else None
 
-                subtitle = ""
-                if start_time is not None and end_time is not None:
-                    subtitle += f"{start_time} - {end_time}"
-                if location is not None:
-                    subtitle += f" @ {location}"
+            subtitle = ""
+            if start_time is not None and end_time is not None:
+                subtitle += f"{start_time} - {end_time}"
+            if location is not None:
+                subtitle += f" @ {location}"
 
-                date_glyph_id = date_to_glyph_id(start_dt)                
-                self.show_result(event['summary'], subtitle, score=10-i, glyph_id=date_glyph_id, method="open_webpage", params=[event['htmlLink']])
-        except Exception as e:
-            self.show_result('Could not load upcoming events', e)
+            date_glyph_id = date_to_glyph_id(start_dt)                
+            self.show_result(event['summary'], subtitle, score=10-i, glyph_id=date_glyph_id, method="open_webpage", params=[event['htmlLink']])
+        
 
 
 if __name__ == "__main__":
