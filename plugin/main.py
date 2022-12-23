@@ -33,7 +33,7 @@ class GoogleCalendar(Flox):
 
     def query(self, query):
         if not credentials_exist():
-            return self.action_result("It seems like you have not set up your credentials yet", "Press Enter to open the setup page", "open_webpage", [SETUP_URL])
+            return self.show_result("It seems like you have not set up your credentials yet", "Press Enter to open the setup page", method="open_webpage", params=[SETUP_URL])
 
         self.display_current_events()
 
