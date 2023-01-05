@@ -1,5 +1,5 @@
 flowlauncher
-oauth2client
 google-api-python-client
 ctparse
 google-auth-oauthlib
+flox-lib

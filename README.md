@@ -1,6 +1,7 @@
 # Google Calendar Plugin for Flow Launcher
 A plugin for Flow Launcher to add events to Google Calendar. To use the plugin, you need to create a Google Cloud Platform project, enable the Google Calendar API, and create credentials. The plugin will use the credentials to access your Google Calendar. Your credentials are stored locally on your computer and are not sent to any server.
 
+![Screenshot](Images/screenshot.png)
 # Setup
 Instructions for setting up your Google Cloud credentials, you can also follow the instructions [here](https://developers.google.com/calendar/api/quickstart/python) up until 'Install the Google client library' step. It is not necessary to enter payment information for your Google Cloud account.
 1. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project)
@@ -9,14 +10,15 @@ Instructions for setting up your Google Cloud credentials, you can also follow t
 4. Click **Create credentials** > **OAuth client ID**
 5. You will be prompted to set up a OAuth consent screen. Select **External** and click **Create**
 6. Click **ADD OR REMOVE SCOPES** and add the following scope: `https://www.googleapis.com/auth/calendar`
-7. Go back to the Credentials page and click **Create credentials** > **OAuth client ID**
-8. Select **Desktop app** and click **Create**
-9. In the **Name** field, enter a name for your credentials, this can be anything
-10. Click **Create**
-11. Click **Download JSON** and save the file as `credentials.json`
-12. Open the FlowLauncher folder by typing 'userdata' in the Flow Launcher search bar
-13. Navigate to **Plugins** > **Flow.Launcher.Plugin.GoogleCalendar-[version_number]**
-14. Copy the `credentials.json` file into this folder
+7. Add the email address you want to use to the list of test users
+8. Go back to the Credentials page and click **Create credentials** > **OAuth client ID**
+9. Select **Desktop app** and click **Create**
+10. In the **Name** field, enter a name for your credentials, this can be anything
+11. Click **Create**
+12. Click **Download JSON** and save the file as `credentials.json`
+13. Open the FlowLauncher folder by typing 'userdata' in the Flow Launcher search bar
+14. Navigate to **Plugins** > **Flow.Launcher.Plugin.GoogleCalendar-[version_number]**
+15. Copy the `credentials.json` file into this folder
 
 After typing your first event in the Flow Launcher search bar, a Google sign in window will appear. Sign in with the Google account you want to add events to and allow access to your calendar. You will only need to do this once.
 Flow Launcher might throw an error, this is a known bug, just close the error window and the plugin will work as expected.
