@@ -7,10 +7,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def credentials_exist():
-    # home_dir = os.path.expanduser('~')
-    # credential_dir = os.path.join(home_dir, '.credentials')
-    # credential_path = os.path.join(credential_dir, 'calendar-plugin.json')
-    # return os.path.exists(credential_path)
     return os.path.exists('credentials.json')
 
 def get_credentials():
@@ -24,12 +20,9 @@ def get_credentials():
 
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())

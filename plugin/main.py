@@ -2,11 +2,10 @@ import webbrowser
 from datetime import datetime
 
 from apiclient import discovery
-from ctparse import ctparse
-from flox import Flox
-
 from credentials import credentials_exist, get_credentials
+from ctparse import ctparse
 from events import get_event_times, get_sorted_events
+from flox import Flox
 from icons import date_to_glyph_id
 from templates import EVENT
 
@@ -37,10 +36,10 @@ class GoogleCalendar(Flox):
         if not credentials_exist():
             return self.show_result("It seems like you have not set up your credentials yet", "Press Enter to open the setup page", method="open_webpage", params=[SETUP_URL])
 
-        self.display_current_events()
-
         if query == "":
-            return self.show_result("No event name specified yet", "Please provide a name for your event")
+            self.show_result("No event name specified yet", "Please provide a name for your event")
+
+        self.display_current_events()
 
         try:
             ts = datetime.now()
