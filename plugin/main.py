@@ -103,6 +103,9 @@ class GoogleCalendar(Flox):
                 self.show_result('Could not load upcoming events', e)
 
         for i, event in enumerate(self.upcoming_events):
+            
+            if 'summary' not in event: continue
+
             start_dt, _, start_time, end_time = get_event_times(event, TIME_FORMAT)
 
             location = event['location'] if 'location' in event else None
