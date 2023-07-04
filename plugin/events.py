@@ -19,7 +19,6 @@ def get_sorted_events(service, num_events):
 
 
 def get_event_times(event, time_format):
-    
     start_dt, end_dt, start_time, end_time = None, None, None, None
     if 'dateTime' in event['start']:
         start_dt = datetime.strptime(event['start']['dateTime'][:19], time_format)
