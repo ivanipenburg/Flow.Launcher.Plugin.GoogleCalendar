@@ -1,3 +1,9 @@
+# Project Status: Not in Working State & No Longer Maintained
+
+🚨 Important Note: This project is currently not in a working state and is no longer being actively maintained.
+
+Thank you for your interest in this project.
+
 # Google Calendar Plugin for Flow Launcher
 A plugin for Flow Launcher to add events to Google Calendar. To use the plugin, you need to create a Google Cloud Platform project, enable the Google Calendar API, and create credentials. The plugin will use the credentials to access your Google Calendar. Your credentials are stored locally on your computer and are not sent to any server.
 
